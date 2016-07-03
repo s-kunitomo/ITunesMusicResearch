@@ -1,0 +1,114 @@
+package com.example.shoji.itunesmusicresearch
+
+import android.net.Uri
+import retrofit.Call
+import retrofit.http.GET
+import retrofit.http.Query
+
+interface WeatherService {
+    @GET("/forecast/webservice/json/v1")
+    fun weather(@Query("city") city: String): Call<Weather>
+}
+
+data class Weather(
+        val location: Location,
+        val title: String,
+        val link: Uri,
+        val publicTime: String,
+        val description: Description,
+        val forecasts: List<Forecast>,
+        val pinpointLocation: PinpointLocation,
+        val copyright: Copyright
+)
+
+/**
+ * @property area 地方名（九州地方）
+ * @property pref 都道府県名（福岡県）
+ * @property city 一時細分区名（八幡）
+ */
+data class Location(
+        val area: String,
+        val pref: String,
+        val city: String
+)
+
+/**
+ * @property text 天気概況文
+ * @property publicTime 発表時刻
+ */
+data class Description(
+        val text: String,
+        val publicTime: String
+)
+
+/**
+ * @property date 予報日
+ * @property dateLabel 予報日(今日、明日、明後日のいずれか)
+ * @property telop 天気（晴れ、曇り、雨など）
+ * @property image 天気アイコン
+ * @property min 最高気温
+ * @property max 最低気温
+ */
+data class Forecast(
+        val date: String,
+        val dateLabel: String,
+        val telop: String,
+        val image: Image,
+        val min: Temperature,
+        val max: Temperature
+)
+
+/**
+ * @property title 天気（晴れ、曇り、雨など）
+ * @property link 天気情報のURL
+ * @property url 天気アイコンのURL
+ * @property width 天気アイコンの幅
+ * @property height 天気アイコンの高さ
+ */
+data class Image(
+        val title: String,
+        val link: String,
+        val url: Uri,
+        val width: Int,
+        val height: Int
+)
+
+/**
+ * @property celsius 摂氏
+ * @property fahrenheit 華氏
+ */
+data class Temperature(
+        val celsius: String,
+        val fahrenheit: String
+)
+
+/**
+ * @property link 天気情報のURL
+ * @property name 市区町村名
+ */
+data class PinpointLocation(
+        val link: Uri,
+        val name: String
+)
+
+/**
+ * @property provider livedoor 天気情報で使用している気象データの配信元
+ * @property link livedoor 天気情報のURL
+ * @property title コピーライトの文言
+ * @property image livedoor 天気情報へのURL、アイコンなど
+ */
+data class Copyright(
+        val provider: List<Provider>,
+        val link: Uri,
+        val title: String,
+        val image: Image
+)
+
+/**
+ * @property link 気象データの配信元のURL
+ * @property name 気象データの配信元の名前
+ */
+data class Provider(
+        val link: Uri,
+        val name: String
+)
